@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+
+  <defs>
+    <!-- metallic body -->
+    <radialGradient id="body" cx="35%" cy="30%">
+      <stop offset="0%" stop-color="#7d7d7d"/>
+      <stop offset="35%" stop-color="#4b4b4b"/>
+      <stop offset="100%" stop-color="#121212"/>
+    </radialGradient>
+
+    <!-- spike shading -->
+    <linearGradient id="spike" x1="0%" x2="100%">
+      <stop offset="0%" stop-color="#555"/>
+      <stop offset="100%" stop-color="#111"/>
+    </linearGradient>
+
+    <!-- shadow -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- floor shadow -->
+  <ellipse cx="128" cy="220" rx="58" ry="14" fill="#000" opacity="0.25"/>
+
+  <g filter="url(#shadow)">
+
+    <!-- spikes -->
+    <g fill="url(#spike)">
+      <rect x="120" y="8" width="16" height="42" rx="4"/>
+      <rect x="120" y="206" width="16" height="42" rx="4"/>
+      <rect x="8" y="120" width="42" height="16" rx="4"/>
+      <rect x="206" y="120" width="42" height="16" rx="4"/>
+
+      <g transform="rotate(45 128 128)">
+        <rect x="120" y="8" width="16" height="42" rx="4"/>
+        <rect x="120" y="206" width="16" height="42" rx="4"/>
+        <rect x="8" y="120" width="42" height="16" rx="4"/>
+        <rect x="206" y="120" width="42" height="16" rx="4"/>
+      </g>
+    </g>
+
+    <!-- main body -->
+    <circle cx="128" cy="128" r="68"
+            fill="url(#body)"
+            stroke="#000"
+            stroke-width="6"/>
+
+    <!-- metallic reflections -->
+    <ellipse cx="102" cy="96" rx="24" ry="16"
+             fill="#bdbdbd"
+             opacity="0.45"/>
+
+    <ellipse cx="146" cy="152" rx="42" ry="26"
+             fill="#000"
+             opacity="0.18"/>
+
+    <!-- center bolt -->
+    <circle cx="128" cy="128" r="13"
+            fill="#232323"
+            stroke="#777"
+            stroke-width="4"/>
+
+    <!-- tiny highlight -->
+    <circle cx="122" cy="122" r="3" fill="#ccc"/>
+  </g>
+</svg>
