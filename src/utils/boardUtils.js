@@ -46,3 +46,31 @@ export const placeMines = (board, mineCount) => {
 
   return newBoard
 }
+
+export const floodFill= (board,startRow,startCol) => {
+  const rows = board.length
+  const cols = board[0].length
+  const newBoard = board.map((row) => row.map((cell) => ({ ...cell })))
+
+  const queue = [[startRow,startCol]]
+
+  while (queue.length) {
+  
+    let [r,c] = queue.shift();
+    const cell = newBoard[r][c]
+
+    if(cell.isFlagged || cell.isRevealed)  continue
+    cell.isRevealed = true;
+
+    if(cell.adjacentMines !== 0) continue
+    for (const [dx,dy] of directions) {
+      const newRow = r + dx
+      const newCol = c + dy
+
+      if(isValid(newRow,newCol,rows,cols)&&!newBoard[newRow][newCol].isRevealed){
+        queue.push([newRow,newCol])
+      }
+    }
+  }
+  return newBoard
+}

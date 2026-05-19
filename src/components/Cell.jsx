@@ -1,4 +1,5 @@
 import React from "react";
+import { floodFill } from "../utils/boardUtils";
 
 const Cell = ({ cell, rowIndex, cellIndex, board, setBoard, className }) => {
   let isFlagged = cell.isFlagged;
@@ -18,8 +19,13 @@ const Cell = ({ cell, rowIndex, cellIndex, board, setBoard, className }) => {
   
   const handleReveal=() => {
     if (board[rowIndex][cellIndex].isFlagged) return;
-    const newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
-    newBoard[rowIndex][cellIndex].isRevealed = true
+    let newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
+    const cell = newBoard[rowIndex][cellIndex];
+    if(cell.adjacentMines === 0){
+      newBoard = floodFill(newBoard,rowIndex,cellIndex)
+    }else{
+      cell.isRevealed = true
+    }
     setBoard(newBoard)
   }
 
