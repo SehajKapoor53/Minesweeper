@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Cell from "./Cell";
-import { calculateAdjacentMines, checkWin, placeMines } from "../utils/boardUtils.js";
+import {
+  calculateAdjacentMines,
+  checkWin,
+  placeMines,
+} from "../utils/boardUtils.js";
 
-const Board = () => {
-
-
+const Board = ({ flagsLeft, setFlagsLeft, time, setTime, config }) => {
   const createBoard = (rows, cols) => {
     const board = [];
     for (let i = 0; i < rows; i++) {
       const row = [];
-
       for (let j = 0; j < cols; j++) {
         row.push({
           r: i,
@@ -20,23 +21,37 @@ const Board = () => {
           adjacentMines: 0,
         });
       }
-
       board.push(row);
     }
     return board;
   };
-  
 
   const [firstclickdone, setFirstclickdone] = useState(false);
-  const [board, setBoard] = useState(() => createBoard(9, 9));
-  const [gameState, setGameState] = useState("idle")
+  const [gameState, setGameState] = useState("idle");
+  const [board, setBoard] = useState(createBoard(config.rows,config.cols))
+  useEffect(() => {
+    setBoard(createBoard(config.rows, config.cols));
+  }, [config]);
 
+  useEffect(() => {
+    if (gameState !== "playing") return;
+    const interval = setInterval(() => {
+      setTime((t) => t + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [gameState, setTime]);
 
-  if(checkWin(board)){
-    setGameState("won")
-  }
+  useEffect(() => {
+    setGameState("idle");
+    setFirstclickdone(false);
+    setTime(0);
+  }, [config]);
 
-
+  useEffect(() => {
+    if (checkWin(board)) {
+      setGameState("won");
+    }
+  }, [board]);
 
   return (
     <div
@@ -56,15 +71,10 @@ const Board = () => {
     >
       {board.map((row, rowIndex) =>
         row.map((cell, cellIndex) => (
-          <Cell
+           <Cell
             key={`${rowIndex},${cellIndex}`}
-            cell={cell}
-            setBoard={setBoard}
-            board={board}
-            firstclickdone={firstclickdone}
-            setFirstclickdone={setFirstclickdone}
-            gameState={gameState}
-            setGameState={setGameState}
+            mines={config.mines}
+            {...{cell ,setBoard, board, firstclickdone, setFirstclickdone, gameState, setGameState, flagsLeft, setFlagsLeft}}
           />
         )),
       )}
