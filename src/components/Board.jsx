@@ -28,7 +28,7 @@ const Board = ({ flagsLeft, setFlagsLeft, time, setTime, config }) => {
 
   const [firstclickdone, setFirstclickdone] = useState(false);
   const [gameState, setGameState] = useState("idle");
-  const [board, setBoard] = useState(createBoard(config.rows,config.cols))
+  const [board, setBoard] = useState(createBoard(config.rows, config.cols));
   useEffect(() => {
     setBoard(createBoard(config.rows, config.cols));
   }, [config]);
@@ -53,7 +53,20 @@ const Board = ({ flagsLeft, setFlagsLeft, time, setTime, config }) => {
     }
   }, [board]);
 
+
   return (
+    <>
+    {gameState === "won" && (
+  <div className="absolute text-green-500 text-5xl font-bold p-5 bg-gray-800/50 rounded-4xl">
+    🎉 You Win
+  </div>
+)}
+
+{gameState === "lost" && (
+  <div className="absolute text-red-500 text-5xl font-bold p-5 bg-gray-800/50 rounded-4xl">
+    💥 You Lose
+  </div>
+)}
     <div
       className="
       gap-0.5
@@ -71,14 +84,28 @@ const Board = ({ flagsLeft, setFlagsLeft, time, setTime, config }) => {
     >
       {board.map((row, rowIndex) =>
         row.map((cell, cellIndex) => (
-           <Cell
+          <Cell
             key={`${rowIndex},${cellIndex}`}
             mines={config.mines}
-            {...{cell ,setBoard, board, firstclickdone, setFirstclickdone, gameState, setGameState, flagsLeft, setFlagsLeft}}
+            {...{
+              cell,
+              setBoard,
+              board,
+              firstclickdone,
+              setFirstclickdone,
+              gameState,
+              setGameState,
+              flagsLeft,
+              setFlagsLeft,
+            }}
           />
         )),
       )}
-    </div>
+      
+      {/* {gameState==='won' &&<div className="text-5xl text-nowrap">YOU WIN!!!</div> }
+      {gameState==='lost' &&<div className="text-5xl text-nowrap">YOU LOST!!!</div> } */}
+
+    </div></>
   );
 };
 

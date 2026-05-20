@@ -6,29 +6,41 @@ import {
   calculateAdjacentMines,
 } from "../utils/boardUtils";
 
-const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone, gameState, setGameState, mines, flagsLeft, setFlagsLeft }) => {
-
-
+const Cell = ({
+  cell,
+  board,
+  setBoard,
+  firstclickdone,
+  setFirstclickdone,
+  gameState,
+  setGameState,
+  mines,
+  flagsLeft,
+  setFlagsLeft,
+}) => {
   const r = cell.r;
   const c = cell.c;
-
-  if (gameState === "lost" || gameState === "won") return;
 
   const handleFlag = (e) => {
     e.preventDefault();
     if (board[r][c].isRevealed) return;
     const newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
-    if(newBoard[r][c].isFlagged === true){
+    if (newBoard[r][c].isFlagged === true) {
       newBoard[r][c].isFlagged = false;
-      setFlagsLeft(f=>f+1)
-    }else{
+      setFlagsLeft((f) => f + 1);
+    } else {
       newBoard[r][c].isFlagged = true;
-      setFlagsLeft(f=>f-1)
+      setFlagsLeft((f) => f - 1);
     }
     setBoard(newBoard);
   };
 
   const handleReveal = () => {
+
+
+    if(gameState === "lost" || gameState === "won") return;
+
+
     if (board[r][c].isFlagged) return;
     let newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
 
@@ -44,8 +56,13 @@ const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone, gameSt
 
     if (current.isMine) {
       current.isRevealed = true;
+      for (const row of newBoard) {
+        for (const cell of row) {
+          if(cell.isMine) cell.isRevealed=true
+        }
+      }
       setBoard(newBoard);
-      setGameState("lost")
+      setGameState("lost");
       return;
     }
 
@@ -55,7 +72,7 @@ const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone, gameSt
       current.isRevealed = true;
     }
     setBoard(newBoard);
-  }
+  };
 
   return (
     <div
@@ -66,14 +83,16 @@ const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone, gameSt
         cell.isFlagged
           ? "bg-amber-200"
           : cell.isRevealed
-          ? "bg-slate-400 border border-zinc-700"
-          : "bg-emerald-500 hover:bg-emerald-400"
+            ? "bg-slate-400 border border-zinc-700"
+            : "bg-emerald-500 hover:bg-emerald-400"
       }
       `}
     >
       {cell.isFlagged && <img src="/flag.svg" />}
       {cell.isRevealed && cell.adjacentMines > 0 && <p>{cell.adjacentMines}</p>}
-      {cell.isMine && cell.isRevealed && <img className="bg-red-500" src="/mine.svg" />}
+      {cell.isMine && cell.isRevealed && (
+        <img className="bg-red-500" src="/mine.svg" />
+      )}
     </div>
   );
 };
