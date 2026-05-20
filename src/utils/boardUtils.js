@@ -28,7 +28,7 @@ export const calculateAdjacentMines = (board) => {
   return newBoard
 };
 
-export const placeMines = (board, mineCount) => {
+export const placeMines = (board, mineCount, safeZone = []) => {
   const rows = board.length
   const cols = board[0].length
 
@@ -37,6 +37,9 @@ export const placeMines = (board, mineCount) => {
   while (placed < mineCount) {
     const r = Math.floor(Math.random() * rows)
     const c = Math.floor(Math.random() * cols)
+
+    if(safeZone.some(([x,y])=>x===r&&y===c)) continue
+
 
     if (!newBoard[r][c].isMine) {
       newBoard[r][c].isMine = true
@@ -59,10 +62,10 @@ export const floodFill= (board,startRow,startCol) => {
     let [r,c] = queue.shift();
     const cell = newBoard[r][c]
 
-    if(cell.isFlagged || cell.isRevealed)  continue
+    if(cell.isFlagged || cell.isRevealed) continue
     cell.isRevealed = true;
 
-    if(cell.adjacentMines !== 0) continue
+    if(cell.adjacentMines !== 0 || cell.isMine) continue
     for (const [dx,dy] of directions) {
       const newRow = r + dx
       const newCol = c + dy
@@ -73,4 +76,24 @@ export const floodFill= (board,startRow,startCol) => {
     }
   }
   return newBoard
+}
+
+
+export const createSafeZone = (board,r,c) => {
+  const rows = board.length
+  const cols = board[0].length
+  const newBoard = board.map((row) => row.map((cell) => ({ ...cell })))
+
+  let safeZone = [[r,c]]
+
+  for (const [dx,dy] of directions) {
+    const newRow = r + dx
+    const newCol = c + dy
+
+    if (isValid(newRow, newCol, rows, cols)) {
+      safeZone.push([newRow, newCol])
+    }
+  }
+
+  return safeZone
 }

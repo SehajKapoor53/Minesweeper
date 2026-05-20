@@ -3,6 +3,11 @@ import Cell from "./Cell";
 import { calculateAdjacentMines, placeMines } from "../utils/boardUtils.js";
 
 const Board = () => {
+
+  const [firstclickdone, setFirstclickdone] = useState(false)
+
+
+
   const createBoard = (rows, cols) => {
     const board = [];
     for (let i = 0; i < rows; i++) {
@@ -10,8 +15,8 @@ const Board = () => {
 
       for (let j = 0; j < cols; j++) {
         row.push({
-          x: j,
-          y: i,
+          r: i,
+          c: j,
           isMine: false,
           isRevealed: false,
           isFlagged: false,
@@ -21,15 +26,11 @@ const Board = () => {
 
       board.push(row);
     }
-    return board;
-  };
+    return board
+  }
 
-  const [board, setBoard] = useState(() => {
-    let b = createBoard(9, 9);
-    b = placeMines(b, 10);
-    b = calculateAdjacentMines(b);
-    return b;
-  });
+  const [board, setBoard] = useState(() => createBoard(9, 9))
+  
 
   return (
     <div
@@ -43,10 +44,10 @@ const Board = () => {
           <Cell
             key={`${rowIndex},${cellIndex}`}
             cell={cell}
-            rowIndex={rowIndex}
-            cellIndex={cellIndex}
             setBoard={setBoard}
             board={board}
+            firstclickdone={firstclickdone}
+            setFirstclickdone={setFirstclickdone}
           />
         )),
       )}
