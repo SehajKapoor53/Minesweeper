@@ -48,19 +48,19 @@ const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone }) => {
     <div
       onClick={handleReveal}
       onContextMenu={handleFlag}
-      className={`w-12 h-12 cursor-pointer flex justify-center items-center text-3xl
+      className={`text-zinc-800 w-12 h-12 cursor-pointer flex justify-center items-center text-3xl
       ${
         cell.isFlagged
-          ? "bg-red-500"
+          ? "bg-amber-200"
           : cell.isRevealed
-          ? "bg-zinc-500"
-          : "bg-green-500"
+          ? "bg-slate-400 border border-zinc-700"
+          : "bg-emerald-500 hover:bg-emerald-400"
       }
       `}
     >
       {cell.isFlagged && <img src="/flag.svg" />}
       {cell.isRevealed && cell.adjacentMines > 0 && <p>{cell.adjacentMines}</p>}
-      {cell.isMine && cell.isRevealed && <img src="/mine.svg" />}
+      {cell.isMine && cell.isRevealed && <img className="bg-red-500" src="/mine.svg" />}
     </div>
   );
 };

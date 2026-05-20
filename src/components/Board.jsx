@@ -3,10 +3,7 @@ import Cell from "./Cell";
 import { calculateAdjacentMines, placeMines } from "../utils/boardUtils.js";
 
 const Board = () => {
-
-  const [firstclickdone, setFirstclickdone] = useState(false)
-
-
+  const [firstclickdone, setFirstclickdone] = useState(false);
 
   const createBoard = (rows, cols) => {
     const board = [];
@@ -26,15 +23,23 @@ const Board = () => {
 
       board.push(row);
     }
-    return board
-  }
+    return board;
+  };
 
-  const [board, setBoard] = useState(() => createBoard(9, 9))
-  
+  const [board, setBoard] = useState(() => createBoard(9, 9));
 
   return (
     <div
-      className="gap-px p-px grid justify-center"
+      className="
+      gap-0.5
+      p-3
+      grid
+      justify-center
+      bg-zinc-800
+      rounded-2xl
+      shadow-2xl
+      border border-zinc-700
+      "
       style={{
         gridTemplateColumns: `repeat(${board[0].length}, 48px)`,
       }}
