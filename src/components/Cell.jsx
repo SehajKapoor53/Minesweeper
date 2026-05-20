@@ -6,9 +6,11 @@ import {
   calculateAdjacentMines,
 } from "../utils/boardUtils";
 
-const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone }) => {
+const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone, gameState, setGameState }) => {
   const r = cell.r;
   const c = cell.c;
+
+  if (gameState === "lost" || gameState === "won") return;
 
   const handleFlag = (e) => {
     e.preventDefault();
@@ -27,12 +29,15 @@ const Cell = ({ cell, board, setBoard, firstclickdone, setFirstclickdone }) => {
       newBoard = placeMines(newBoard, 10, safeZone);
       newBoard = calculateAdjacentMines(newBoard);
       setFirstclickdone(true);
+      setGameState("playing");
     }
 
     const current = newBoard[r][c];
+
     if (current.isMine) {
       current.isRevealed = true;
       setBoard(newBoard);
+      setGameState("lost")
       return;
     }
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Cell from "./Cell";
-import { calculateAdjacentMines, placeMines } from "../utils/boardUtils.js";
+import { calculateAdjacentMines, checkWin, placeMines } from "../utils/boardUtils.js";
 
 const Board = () => {
-  const [firstclickdone, setFirstclickdone] = useState(false);
+
 
   const createBoard = (rows, cols) => {
     const board = [];
@@ -25,8 +25,18 @@ const Board = () => {
     }
     return board;
   };
+  
 
+  const [firstclickdone, setFirstclickdone] = useState(false);
   const [board, setBoard] = useState(() => createBoard(9, 9));
+  const [gameState, setGameState] = useState("idle")
+
+
+  if(checkWin(board)){
+    setGameState("won")
+  }
+
+
 
   return (
     <div
@@ -53,6 +63,8 @@ const Board = () => {
             board={board}
             firstclickdone={firstclickdone}
             setFirstclickdone={setFirstclickdone}
+            gameState={gameState}
+            setGameState={setGameState}
           />
         )),
       )}
